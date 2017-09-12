@@ -84,8 +84,13 @@ fxLayoutGap.xs="0">
       <button type="submit" md-button class="background-primary text-floral-white" [disabled]="dishDetailCommentForm.invalid">Submit</button>
     </form>
   
-    <div [hidden] = "dish">
+    <div [hidden] = "dish || errMess">
       <md-spinner></md-spinner> <h4>Loading . . . Please Wait</h4>
+    </div>
+
+    <div *ngIf="errMess">
+      <h2>Error</h2>
+      <h4>{{errMess}}</h4>
     </div>
   </div>
 
