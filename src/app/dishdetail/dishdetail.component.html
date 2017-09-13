@@ -83,6 +83,7 @@ fxLayoutGap.xs="0">
       </p>
       <button type="submit" md-button class="background-primary text-floral-white" [disabled]="dishDetailCommentForm.invalid">Submit</button>
     </form>
+  </div>
   
     <div [hidden] = "dish || errMess">
       <md-spinner></md-spinner> <h4>Loading . . . Please Wait</h4>
@@ -92,6 +93,5 @@ fxLayoutGap.xs="0">
       <h2>Error</h2>
       <h4>{{errMess}}</h4>
     </div>
-  </div>
   
 </div>
