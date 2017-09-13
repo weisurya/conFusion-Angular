@@ -38,7 +38,7 @@ export class DishService {
 
   getDish(id: number): Observable<Dish> {
     //return Observable.of(DISHES.filter((dish) => (dish.id === id))[0]).delay(2000);
-    return this.restangular.one('dishes', id);
+    return this.restangular.one('dishes', id).get();
   }
 
   getFeaturedDish(): Observable<Dish> {
