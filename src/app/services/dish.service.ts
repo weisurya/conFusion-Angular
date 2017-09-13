@@ -7,6 +7,7 @@ import { baseURL } from '../shared/baseurl';
 import { ProcessHTTPMsgService } from './process-httpmsg.service';
 
 import { Observable } from 'rxjs/Rx';
+import { RestangularModule, Restangular } from 'ngx-restangular';
 
 //by using toPromise, Observable may only emit 1 value instead many values, because this func.
 //is mimicing promise func. which only may emit 1 value
@@ -17,7 +18,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class DishService {
 
-  constructor(private http: Http,
+  constructor(private restangular: Restangular,
               private processHTTPMsgService : ProcessHTTPMsgService) { }
 
   getDishes(): Observable<Dish[]> {
@@ -28,23 +29,26 @@ export class DishService {
     //});
     
     //return Observable.of(DISHES).delay(2000);
-    return this.http.get(baseURL + 'dishes')
-      .map(res => { return this.processHTTPMsgService.extractData(res); })
-      .catch(error => { return this.processHTTPMsgService.handleError(error); });
+    // return this.http.get(baseURL + 'dishes')
+    //   .map(res => { return this.processHTTPMsgService.extractData(res); })
+    //   .catch(error => { return this.processHTTPMsgService.handleError(error); });
+
+    return this.restangular.all('dishes').getList();
   }
 
   getDish(id: number): Observable<Dish> {
     //return Observable.of(DISHES.filter((dish) => (dish.id === id))[0]).delay(2000);
-    return this.http.get(baseURL + 'dishes/' + id)
-      .map(res => { return this.processHTTPMsgService.extractData(res); })
-      .catch(error => { return this.processHTTPMsgService.handleError(error); });
+    return this.restangular.one('dishes', id);
   }
 
   getFeaturedDish(): Observable<Dish> {
     //return Observable.of(DISHES.filter((dish) => dish.featured)[0]).delay(2000);
-    return this.http.get(baseURL + 'dishes?featured=true')
-      .map(res => { return this.processHTTPMsgService.extractData(res)[0]; })
-      .catch(error => { return this.processHTTPMsgService.handleError(error); });
+    // return this.http.get(baseURL + 'dishes?featured=true')
+    //   .map(res => { return this.processHTTPMsgService.extractData(res)[0]; })
+    //   .catch(error => { return this.processHTTPMsgService.handleError(error); });
+
+    return this.restangular.all('dishes').getList({featured: true})
+      .map(dishes => dishes[0]);
   }
 
   getDishIds(): Observable<number[]> {
