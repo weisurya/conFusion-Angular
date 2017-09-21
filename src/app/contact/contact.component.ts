@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormGroupDirective } from '@angular/forms';
+import { visibility, flyInOut, expand } from '../animations/app.animations';
+
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animations';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
@@ -12,7 +14,10 @@ import { flyInOut } from '../animations/app.animations';
     'style': 'display: block;'
   },
   animations: [
-    flyInOut()
+    flyInOut(),
+    expand(),
+    visibility(),
+    
   ]
 })
 export class ContactComponent implements OnInit {
@@ -22,6 +27,12 @@ export class ContactComponent implements OnInit {
   feedback: Feedback;
   //feedback2: Feedback;
   contactType = ContactType;
+
+  showForm = true;
+  submitForm = false;
+
+  errMess: string;
+
   formErrors = {
     'firstname' : '',
     'lastname' : '',
@@ -53,7 +64,8 @@ export class ContactComponent implements OnInit {
   @ViewChild('f') feedbackFormDirective;
   //@ViewChild('f2') feedbackFormDirective2;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private feedbackservice: FeedbackService,) {
     this.createForm();  
   }
 
@@ -86,6 +98,7 @@ export class ContactComponent implements OnInit {
       message: ''
     });*/
   }
+
   onValueChanged(data?: any) {
     if(!this.feedbackForm) {return;}
 
@@ -104,9 +117,20 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+    this.showForm = false;
+    this.submitForm = true;
+
     this.feedback = this.feedbackForm.value;
     console.log(this.feedback);
     //this.feedbackForm.reset();
+
+    this.feedbackservice.submitFeedback(this.feedback)
+      .subscribe(feedback => {
+        this.submitForm = false;
+        setTimeout(() => this.showForm = true, 5000);
+      },
+      errmess => this.errMess = <any>errmess);
+
     this.feedbackFormDirective.resetForm({
       firstname: '',
       lastname: '',

@@ -39,9 +39,11 @@ fxLayoutGap="10px">
  <div fxFlex fxFlexOffset="20px" class="form-size">
    <h3>Send us your Feedback</h3>
 
-   <p>{{ feedbackForm.value | json}} {{ feedbackForm.status | json }}</p>
+   <!--<p>{{ feedbackForm.value | json}} {{ feedbackForm.status | json }}</p>-->
 
-   <form novalidate [formGroup]="feedbackForm" #f="ngForm" (ngSubmit)="onSubmit()">
+   <p>{{ showForm | json}} {{ submitForm | json}} {{ showResult | json}}</p>
+
+   <form novalidate [formGroup]="feedbackForm" #f="ngForm" (ngSubmit)="onSubmit()" *ngIf="showForm" [@expand]>
      <p>
        <md-input-container class="half-width" dividerColor="{{ formErrors.firstname ? 'warm' : 'primary' }}">
          <input mdInput formControlName="firstname" placeholder="First Name" type="text" required>
@@ -87,6 +89,39 @@ fxLayoutGap="10px">
      </p>
      <button type="submit" md-button class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>
    </form>
+
+   <div [hidden] = "!submitForm" [@expand]>
+      <md-spinner></md-spinner> <h4>Submitting . . . Please Wait</h4>
+    </div>
+
+    <div *ngIf="!(showForm || submitForm)" [@expand]>
+        <md-list>
+          <h3>Your submission</h3>  
+            <md-list-item>
+              <p md-line>
+                <span>First Name {{feedback.firstname}} </span>
+              </p>
+              <p md-line>
+                <span>Last Name {{feedback.lastname}} </span>
+              </p>
+              <p md-line>
+                <span>Tel. Number {{feedback.telnum}} </span>
+              </p>
+              <p md-line>
+                <span>Email {{feedback.email}} </span>
+              </p>
+              <p md-line>
+                <span>Contact you? {{feedback.agree}} </span>
+              </p>
+              <p md-line>
+                <span>How? {{feedback.contacttype}} </span>
+              </p>
+              <p md-line>
+                <span>Feedback {{feedback.message}} </span>
+              </p>
+            </md-list-item>
+        </md-list>
+      </div>
 
 
 
