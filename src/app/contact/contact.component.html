@@ -41,7 +41,7 @@ fxLayoutGap="10px">
 
    <!--<p>{{ feedbackForm.value | json}} {{ feedbackForm.status | json }}</p>-->
 
-   <p>{{ showForm | json}} {{ submitForm | json}} {{ showResult | json}}</p>
+   <!-- <p>{{ showForm | json}} {{ submitForm | json}} {{ showResult | json}}</p> -->
 
    <form novalidate [formGroup]="feedbackForm" #f="ngForm" (ngSubmit)="onSubmit()" *ngIf="showForm" [@expand]>
      <p>
